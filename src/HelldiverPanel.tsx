@@ -49,6 +49,13 @@ const HelldiverPanel = () => {
   ]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [shake, setShake] = useState<boolean>(false);
+  const [largen, setLargen] = useState<boolean[]>([
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   const handleKeyChange = useCallback((key: ValidKey, isPressed: boolean) => {
     setKeyStates((prev) => ({ ...prev, [key]: isPressed }));
@@ -78,14 +85,23 @@ const HelldiverPanel = () => {
     const newSetToPressState = toPressState.map(
       (state: boolean, index: number) => (index === currentIndex ? true : state)
     );
+    const newLargen = largen;
+    newLargen[currentIndex] = true;
+    setLargen(newLargen);
     setToPressState(newSetToPressState);
     if (newSetToPressState.every((state: boolean) => state === true)) {
-      const newToPress = generateNewPress();
-      setToPress(newToPress);
-      setToPressState(Array(newToPress.length).fill(false));
-      setCurrentIndex(0);
+      setTimeout(() => {
+        const newToPress = generateNewPress();
+        setToPress(newToPress);
+        setToPressState(Array(newToPress.length).fill(false));
+        setLargen(Array(newToPress.length).fill(false));
+        setCurrentIndex(0);
+      }, 200);
     } else {
       setCurrentIndex(currentIndex + 1);
+      setTimeout(() => {
+        setLargen(Array(newLargen.length).fill(false));
+      }, 100);
     }
   };
 
@@ -161,26 +177,46 @@ const HelldiverPanel = () => {
           </div>
         </div>
 
-        <div className={`flex flex-row items-center h-full transition-opacity duration-300 ${!isFocus ? 'opacity-30' : 'opacity-100'}`}>
+        <div
+          className={`flex flex-row items-center h-full transition-opacity duration-300 ${
+            !isFocus ? "opacity-30" : "opacity-100"
+          }`}
+        >
           {toPress.map((el, num) => (
             <div key={num} className="mx-2 w-16 h-16">
               {el === "w" && (
-                <div className="w-16 h-16">
+                <div
+                  className={`transform transition-transform duration-100 w-16 h-16 ${
+                    largen[num] ? "scale-110" : ""
+                  }`}
+                >
                   <ArrowUp isActive={toPressState[num]} shake={shake} />
                 </div>
               )}
               {el === "a" && (
-                <div className="w-16 h-16">
+                <div
+                  className={`transform transition-transform duration-100 w-16 h-16 ${
+                    largen[num] ? "scale-110" : ""
+                  }`}
+                >
                   <ArrowLeft isActive={toPressState[num]} shake={shake} />
                 </div>
               )}
               {el === "s" && (
-                <div className="w-16 h-16">
+                <div
+                  className={`transform transition-transform duration-100 w-16 h-16 ${
+                    largen[num] ? "scale-110" : ""
+                  }`}
+                >
                   <ArrowDown isActive={toPressState[num]} shake={shake} />
                 </div>
               )}
               {el === "d" && (
-                <div className="w-16 h-16">
+                <div
+                  className={`transform transition-transform duration-100 w-16 h-16 ${
+                    largen[num] ? "scale-110" : ""
+                  }`}
+                >
                   <ArrowRight isActive={toPressState[num]} shake={shake} />
                 </div>
               )}
@@ -188,11 +224,9 @@ const HelldiverPanel = () => {
           ))}
         </div>
       </div>
-      
+
       {!isFocus && (
-        <div 
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
-        >
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <span className="text-red-500 text-3xl font-bold animate-pulse bg-black bg-opacity-75 px-6 py-3 rounded-lg">
             Click here to focus
           </span>
