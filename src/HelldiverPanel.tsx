@@ -30,7 +30,9 @@ const HelldiverPanel = () => {
   const [isFocus, setFocus] = useState<boolean>(true);
   const [randomize, setRandomize] = useState<boolean>(true);
   const [title, setTitle] = useState<string>("test");
-  const [icon, setIcon] = useState<string>("HelldiversIcons/General Stratagems/SEAF Artillery.svg");
+  const [icon, setIcon] = useState<string>(
+    "HelldiversIcons/General Stratagems/SEAF Artillery.svg"
+  );
   const [keyStates, setKeyStates] = useState<KeyState>({
     w: false,
     a: false,
@@ -67,7 +69,7 @@ const HelldiverPanel = () => {
       const toDisplay = STRATAGEMS[num];
       arr = decipherJson(toDisplay.code);
       setTitle(toDisplay.name);
-      setIcon(toDisplay.icon)
+      setIcon(toDisplay.icon);
     }
     return arr;
   };
@@ -110,7 +112,7 @@ const HelldiverPanel = () => {
 
   return (
     <div
-      className={`outline-none relative p-4 text-white ${
+      className={`outline-none relative p-8 rounded-lg bg-gray-900 min-h-[400px] shadow-xl ${
         shake ? "animate-shake" : ""
       }`}
       tabIndex={0}
@@ -134,41 +136,68 @@ const HelldiverPanel = () => {
         setFocus(false);
       }}
     >
-      <h1>{title}</h1>
-      <img src={icon} className="w-16 h-16"></img>
-      {!isFocus && (
-        <span className="absolute inset-0 flex items-start justify-center pt-4 text-red-800 text-3xl text-center">
-          Click here to focus
-        </span>
-      )}
+      <div className="flex flex-row space-x-10 h-64">
+        <div className="flex flex-col items-center space-y-4">
+          <h1 className="text-2xl font-bold text-blue-400">{title}</h1>
+          <div className="bg-gray-800 p-4 rounded-lg">
+            <img src={icon} className="w-16 h-16" alt="Stratagem icon" />
+          </div>
+          <div className="flex flex-col items-center space-y-4 bg-gray-800 p-4 rounded-lg">
+            <div className="flex items-center space-x-4">
+              <label className="text-gray-300">Randomize Mode</label>
+              <input
+                name="randomize"
+                type="checkbox"
+                checked={randomize}
+                className="w-4 h-4 accent-blue-500"
+              />
+            </div>
+            <button
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200 font-medium"
+              onClick={() => setRandomize((prev) => !prev)}
+            >
+              Toggle Randomize
+            </button>
+          </div>
+        </div>
 
-      <div className="flex flex-row space-x-10 py-10">
-        {toPress.map((el, num) => {
-          switch (el) {
-            case "w":
-              return <ArrowUp isActive={toPressState[num]} shake={shake} />;
-              break;
-            case "a":
-              return <ArrowLeft isActive={toPressState[num]} shake={shake} />;
-              break;
-            case "s":
-              return <ArrowDown isActive={toPressState[num]} shake={shake} />;
-              break;
-            case "d":
-              return <ArrowRight isActive={toPressState[num]} shake={shake} />;
-              break;
-            default:
-              break;
-          }
-        })}
+        <div className={`flex flex-row items-center h-full transition-opacity duration-300 ${!isFocus ? 'opacity-30' : 'opacity-100'}`}>
+          {toPress.map((el, num) => (
+            <div key={num} className="mx-2 w-16 h-16">
+              {el === "w" && (
+                <div className="w-16 h-16">
+                  <ArrowUp isActive={toPressState[num]} shake={shake} />
+                </div>
+              )}
+              {el === "a" && (
+                <div className="w-16 h-16">
+                  <ArrowLeft isActive={toPressState[num]} shake={shake} />
+                </div>
+              )}
+              {el === "s" && (
+                <div className="w-16 h-16">
+                  <ArrowDown isActive={toPressState[num]} shake={shake} />
+                </div>
+              )}
+              {el === "d" && (
+                <div className="w-16 h-16">
+                  <ArrowRight isActive={toPressState[num]} shake={shake} />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-      <div className=" space-x-4 pt-10">
-        <label className="">randomize?</label>
-        <input name="randomize" type="checkbox" checked={randomize}></input>
-        <button className="" onClick={() => setRandomize((prev) => !prev)}>
-          Toggle Randomize
-        </button>
-      </div>
+      
+      {!isFocus && (
+        <div 
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        >
+          <span className="text-red-500 text-3xl font-bold animate-pulse bg-black bg-opacity-75 px-6 py-3 rounded-lg">
+            Click here to focus
+          </span>
+        </div>
+      )}
     </div>
   );
 };

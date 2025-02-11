@@ -1,4 +1,10 @@
-export const ArrowUp = ({isActive, shake} : {isActive: boolean, shake: boolean }) => (
+export const ArrowUp = ({
+  isActive,
+  shake,
+}: {
+  isActive: boolean;
+  shake: boolean;
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 41 41"
@@ -12,7 +18,13 @@ export const ArrowUp = ({isActive, shake} : {isActive: boolean, shake: boolean }
   </svg>
 );
 
-export const ArrowLeft = ({isActive, shake} : {isActive: boolean, shake: boolean }) => (
+export const ArrowLeft = ({
+  isActive,
+  shake,
+}: {
+  isActive: boolean;
+  shake: boolean;
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 41 41"
@@ -26,7 +38,13 @@ export const ArrowLeft = ({isActive, shake} : {isActive: boolean, shake: boolean
   </svg>
 );
 
-export const ArrowDown = ({isActive, shake} : {isActive: boolean, shake: boolean }) => (
+export const ArrowDown = ({
+  isActive,
+  shake,
+}: {
+  isActive: boolean;
+  shake: boolean;
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 41 41"
@@ -40,7 +58,13 @@ export const ArrowDown = ({isActive, shake} : {isActive: boolean, shake: boolean
   </svg>
 );
 
-export const ArrowRight = ({isActive, shake} : {isActive: boolean, shake: boolean }) => (
+export const ArrowRight = ({
+  isActive,
+  shake,
+}: {
+  isActive: boolean;
+  shake: boolean;
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 41 41"
