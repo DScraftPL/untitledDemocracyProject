@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import STRATAGEMS from "./data/stratagems.json";
 
@@ -56,10 +56,32 @@ const HelldiverPanel = () => {
     false,
     false,
   ]);
+  const [progressValue, setProgressValue] = useState(1.0);
+  const [startTime, setStartTime] = useState(Date.now());
+  const [isStarted, setIsStarted] = useState(false);
 
   const handleKeyChange = useCallback((key: ValidKey, isPressed: boolean) => {
     setKeyStates((prev) => ({ ...prev, [key]: isPressed }));
   }, []);
+
+
+  useEffect(() => {
+      const duration = 10000;
+      const timer = setInterval(() => {
+          const elapsed = Date.now() - startTime
+          const remaining = Math.max(0, 1- (elapsed/duration));
+          if (remaining <= 0){
+            setProgressValue(0);
+            setIsStarted(false);
+            clearInterval(timer);
+            generateNewPress();
+          } else {
+            setProgressValue(remaining)
+          }
+      }, 16)
+
+      return () => clearInterval(timer);
+  }, [startTime, isStarted])
 
   const generateNewPress = () => {
     const keys = ["w", "a", "s", "d"];
@@ -102,6 +124,10 @@ const HelldiverPanel = () => {
       setTimeout(() => {
         setLargen(Array(newLargen.length).fill(false));
       }, 100);
+    }
+    if(!isStarted) {
+      setStartTime(Date.now())
+      setIsStarted(true)
     }
   };
 
@@ -223,6 +249,7 @@ const HelldiverPanel = () => {
             </div>
           ))}
         </div>
+        <progress  value = {progressValue}/>
       </div>
 
       {!isFocus && (
